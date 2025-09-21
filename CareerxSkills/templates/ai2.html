@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerxSkills - Application Features</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind's gray-50 */
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #4f46e5;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Accordion-specific styles */
+        .accordion-item {
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background-color: white;
+        }
+        .accordion-header {
+            width: 100%;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+            text-align: left;
+            font-size: 1.25rem;
+        }
+        .accordion-header:hover {
+            background-color: #f1f5f9;
+        }
+        .accordion-content {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+        .accordion-content.expanded {
+            max-height: 1000px; /* Large enough to fit content */
+            padding: 1.5rem;
+        }
+        .accordion-content p, .accordion-content ul {
+            margin-bottom: 1rem;
+        }
+        .accordion-content ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen">
+    <!-- Navigation Bar -->
+    <header class="bg-white shadow-md p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-indigo-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 009-9v-4a2 2 0 00-2-2h-3V5a2 2 0 00-2-2h-2a2 2 0 00-2 2v2H5a2 2 0 00-2 2v4a9 9 0 009 9z" />
+                </svg>
+                <h1 class="text-2xl font-bold text-indigo-600">CareerxSkills</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8 items-center">
+                <a href="dashboard.html" class="nav-link text-gray-700 font-medium hover:text-indigo-600 transition duration-300">Dashboard</a>
+                <a href="roadmap.html" class="nav-link text-gray-700 font-medium hover:text-indigo-600 transition duration-300">Roadmap</a>
+                <a href="profile.html" class="nav-link text-gray-700 font-medium hover:text-indigo-600 transition duration-300">Profile</a>
+                <a href="login_signup.html" class="bg-red-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-red-600 transition duration-300 transform hover:scale-105 shadow-lg">Log Out</a>
+            </nav>
+            <button id="menu-toggle" class="md:hidden focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-gray-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-white z-40 p-6 flex flex-col items-center justify-center">
+        <button id="close-menu" class="absolute top-4 right-4 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-gray-600">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <nav class="flex flex-col space-y-6 text-center">
+            <a href="dashboard.html" class="text-2xl text-gray-800 hover:text-indigo-600 font-bold transition duration-300">Dashboard</a>
+            <a href="roadmap.html" class="text-2xl text-gray-800 hover:text-indigo-600 font-bold transition duration-300">Roadmap</a>
+            <a href="profile.html" class="text-2xl text-gray-800 hover:text-indigo-600 font-bold transition duration-300">Profile</a>
+            <a href="login_signup.html" class="bg-red-500 text-white px-6 py-3 rounded-full font-bold text-xl hover:bg-red-600 transition duration-300">Log Out</a>
+        </nav>
+    </div>
+
+    <div id="message-box" class="hidden fixed top-4 left-1/2 -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow-xl z-50 transition-all duration-300"></div>
+
+
+    <!-- Main Features Content -->
+    <main class="container mx-auto p-4 md:p-8">
+        <h2 class="text-4xl font-bold mb-8 text-center text-gray-900">Get Your Personalized Career Plan</h2>
+        <p class="text-center mb-8 text-gray-600">Enter your current skills, academic background, interests, and goals below to receive a personalized, AI-powered career plan.</p>
+
+        <div class="bg-white rounded-xl card p-6 mb-8 flex flex-col items-center">
+            <div class="w-full space-y-4">
+                <div>
+                    <label for="user-interests" class="text-lg font-semibold mb-2 text-gray-800 block">Your Interests & Strengths:</label>
+                    <textarea id="user-interests" rows="2" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300" placeholder="e.g., I love problem-solving and am good at math and data analysis."></textarea>
+                </div>
+                <div>
+                    <label for="user-goals" class="text-lg font-semibold mb-2 text-gray-800 block">Your Goals:</label>
+                    <textarea id="user-goals" rows="2" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300" placeholder="e.g., I want to work in a high-growth tech field and eventually become a team leader."></textarea>
+                </div>
+                <div>
+                    <label for="user-academic" class="text-lg font-semibold mb-2 text-gray-800 block">Your Academic Background:</label>
+                    <textarea id="user-academic" rows="2" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300" placeholder="e.g., I'm a computer science student with a minor in statistics."></textarea>
+                </div>
+            </div>
+            <button id="generate-button" class="mt-6 px-6 py-3 bg-indigo-600 text-white rounded-full font-semibold hover:bg-indigo-700 transition duration-300 transform hover:scale-105 shadow-lg">
+                Generate My Plan
+            </button>
+        </div>
+
+        <div id="loading-spinner" class="hidden flex justify-center py-8">
+            <div class="loader"></div>
+        </div>
+
+        <div id="output-container" class="hidden">
+            <!-- Dynamic content will be inserted here -->
+        </div>
+    </main>
+
+    <script>
+        const generateButton = document.getElementById('generate-button');
+        const userInterests = document.getElementById('user-interests');
+        const userGoals = document.getElementById('user-goals');
+        const userAcademic = document.getElementById('user-academic');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const outputContainer = document.getElementById('output-container');
+        const messageBox = document.getElementById('message-box');
+
+        const sectionTitles = [
+            'AI-Powered Career Matching',
+            'Personalized Skill Roadmaps',
+            'Learning Resource Suggestions',
+            'Resume & Interview Prep',
+            'Job Market Trend Analysis'
+        ];
+
+        const sectionIcons = {
+            'AI-Powered Career Matching': `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-indigo-600"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>`,
+            'Personalized Skill Roadmaps': `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-600"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.25c-.294 0-.594-.035-.886-.093a2.25 2.25 0 014.478-2.124a9.135 9.135 0 017.754-3.565 1.875 1.875 0 012.502 1.956 1.875 1.875 0 01-1.956 2.502c-.172.03-.344.053-.516.075M17.25 10.5a7.5 7.5 0 100 15 7.5 7.5 0 000-15z" /></svg>`,
+            'Learning Resource Suggestions': `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-yellow-600"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.096 0-2.174.237-3.197.683a.75.75 0 00-.47 1.258l4.434 4.434a.75.75 0 001.06 0l4.434-4.434a.75.75 0 00-.47-1.258zM12 6.042V3.75m0 2.292c.691 0 1.371.042 2.045.127m0 0a.75.75 0 01.47 1.258l-4.434 4.434a.75.75 0 01-1.06 0L9.205 7.427a.75.75 0 01-.47-1.258m-.88 1.139l-4.434 4.434a.75.75 0 001.06 1.06l4.434-4.434m4.25-1.139a.75.75 0 01.47 1.258l-4.434 4.434a.75.75 0 01-1.06 0L9.205 10.427a.75.75 0 01.47-1.258z" /></svg>`,
+            'Resume & Interview Prep': `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v2.25h-6v-2.25h6zM15 11.25v2.25H9v-2.25h6zM12 8.25v2.25h-6v-2.25h6zM16.5 5.25v2.25h-6v-2.25h6z" /></svg>`,
+            'Job Market Trend Analysis': `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.5a9 9 0 0115.115 5.564l-1.028-1.028a7.5 7.5 0 10-10.982 1.542l-1.542 1.542z" /></svg>`,
+        };
+
+        function showMessage(message, isError = true) {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden');
+            if (isError) {
+                messageBox.classList.add('bg-red-500');
+            } else {
+                messageBox.classList.add('bg-green-500');
+            }
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+                messageBox.classList.remove('bg-red-500', 'bg-green-500');
+            }, 5000);
+        }
+
+        const renderCareerPlan = (generatedText) => {
+            outputContainer.innerHTML = '';
+            
+            sectionTitles.forEach((title, index) => {
+                const startMarker = `**${title}**`;
+                let endMarker = index < sectionTitles.length - 1 ? `**${sectionTitles[index + 1]}**` : 'END_OF_DOCUMENT_MARKER';
+                
+                const startIndex = generatedText.indexOf(startMarker);
+                if (startIndex === -1) return;
+                
+                const endIndex = generatedText.indexOf(endMarker, startIndex + startMarker.length);
+                const content = endIndex === -1 
+                    ? generatedText.substring(startIndex + startMarker.length).trim() 
+                    : generatedText.substring(startIndex + startMarker.length, endIndex).trim();
+
+                const accordionItem = document.createElement('div');
+                accordionItem.className = 'accordion-item';
+
+                const accordionHeader = document.createElement('button');
+                accordionHeader.className = 'accordion-header';
+                accordionHeader.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="p-2 rounded-full bg-gray-100">
+                            ${sectionIcons[title]}
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-900">${title}</h4>
+                    </div>
+                    <svg class="w-6 h-6 text-gray-500 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                `;
+
+                const accordionContent = document.createElement('div');
+                accordionContent.className = 'accordion-content';
+
+                // Format the content
+                const lines = content.split('\n').filter(line => line.trim() !== '');
+                let htmlContent = '';
+                let inList = false;
+
+                lines.forEach(line => {
+                    if (line.trim().startsWith('*')) {
+                        if (!inList) {
+                            htmlContent += '<ul>';
+                            inList = true;
+                        }
+                        const listItemText = line.trim().substring(1).trim();
+                        // Find and bold the bolded text within the list item
+                        const formattedText = listItemText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        htmlContent += `<li>${formattedText}</li>`;
+                    } else {
+                        if (inList) {
+                            htmlContent += '</ul>';
+                            inList = false;
+                        }
+                        // Find and bold the bolded text within the paragraph
+                        const formattedText = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        htmlContent += `<p>${formattedText}</p>`;
+                    }
+                });
+
+                if (inList) {
+                    htmlContent += '</ul>';
+                }
+
+                accordionContent.innerHTML = htmlContent;
+
+                accordionHeader.addEventListener('click', () => {
+                    const isOpen = accordionContent.classList.contains('expanded');
+                    document.querySelectorAll('.accordion-content').forEach(el => {
+                        el.classList.remove('expanded');
+                        el.previousElementSibling.querySelector('svg').style.transform = 'rotate(0deg)';
+                    });
+                    if (!isOpen) {
+                        accordionContent.classList.add('expanded');
+                        accordionHeader.querySelector('svg').style.transform = 'rotate(180deg)';
+                    }
+                });
+
+                accordionItem.appendChild(accordionHeader);
+                accordionItem.appendChild(accordionContent);
+                outputContainer.appendChild(accordionItem);
+            });
+        };
+
+        generateButton.addEventListener('click', async () => {
+            const interests = userInterests.value.trim();
+            const goals = userGoals.value.trim();
+            const academic = userAcademic.value.trim();
+
+            if (!interests && !goals && !academic) {
+                showMessage('Please fill out at least one field to generate a plan.');
+                return;
+            }
+
+            // Hide previous output and show spinner
+            outputContainer.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+
+            const fullPrompt = `Based on the following student information, provide a detailed and well-structured career plan.
+
+Student Interests & Strengths: "${interests}"
+Student Goals: "${goals}"
+Student Academic Background: "${academic}"
+
+The plan should be formatted into five distinct sections with clear titles. Please use these exact titles:
+- **AI-Powered Career Matching**
+- **Personalized Skill Roadmaps**
+- **Learning Resource Suggestions**
+- **Resume & Interview Prep**
+- **Job Market Trend Analysis**
+
+Please provide a clear and concise response for each section. Use lists or paragraphs to structure your response.`;
+
+            try {
+                const apiKey = "AIzaSyBBq9RdD_FSpnaNSpG_7FcgXE48M1TeeGs";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: fullPrompt }] }],
+                    tools: [{ "google_search": {} }],
+                    systemInstruction: {
+                        parts: [{ text: "You are a professional and helpful career advisor. Provide a detailed, easy-to-read, and structured response based on the student's input." }]
+                    },
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const generatedText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (generatedText) {
+                    renderCareerPlan(generatedText);
+                } else {
+                    showMessage('Sorry, could not generate a plan.');
+                }
+
+                // Hide spinner and show output
+                loadingSpinner.classList.add('hidden');
+                outputContainer.classList.remove('hidden');
+            } catch (error) {
+                console.error("Error generating plan:", error);
+                loadingSpinner.classList.add('hidden');
+                outputContainer.classList.remove('hidden');
+                showMessage('An error occurred. Please check your network connection and try again.');
+            }
+        });
+
+        // Mobile menu toggle logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeMenu = document.getElementById('close-menu');
+
+            if (menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenu.classList.toggle('flex');
+                });
+            }
+
+            if (closeMenu) {
+                closeMenu.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('flex');
+                });
+            }
+
+            const navLinks = mobileMenu.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('flex');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

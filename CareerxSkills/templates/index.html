@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerxSkills Homepage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+            animation: gradient-animation 5s ease infinite alternate;
+        }
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+        .testimonial-card {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            transform: translateX(100%);
+            opacity: 0;
+            position: absolute;
+            width: 100%;
+        }
+        .testimonial-card.active {
+            transform: translateX(0);
+            opacity: 1;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+    <!-- Navigation Bar -->
+    <header class="bg-white shadow-lg p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-indigo-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 009-9v-4a2 2 0 00-2-2h-3V5a2 2 0 00-2-2h-2a2 2 0 00-2 2v2H5a2 2 0 00-2 2v4a9 9 0 009 9z" />
+                </svg>
+                <h1 class="text-2xl font-bold text-indigo-600">CareerxSkills</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#features" class="text-gray-600 hover:text-indigo-600 font-semibold transition duration-300">Features</a>
+                <a href="#how-it-works" class="text-gray-600 hover:text-indigo-600 font-semibold transition duration-300">How It Works</a>
+                <a href="#testimonials" class="text-gray-600 hover:text-indigo-600 font-semibold transition duration-300">Testimonials</a>
+                <a href="/{{path}}" class="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition duration-300 transform hover:scale-105 shadow-md">Get Started</a>
+            </nav>
+            <button id="menu-toggle" class="md:hidden focus:outline-none">
+                <!-- Hamburger menu icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-gray-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-white z-40 p-6 flex flex-col items-center justify-center">
+        <button id="close-menu" class="absolute top-4 right-4 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-gray-600">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <nav class="flex flex-col space-y-6 text-center">
+            <a href="#features" class="text-2xl text-gray-800 hover:text-indigo-600 font-bold transition duration-300">Features</a>
+            <a href="#how-it-works" class="text-2xl text-gray-800 hover:text-indigo-600 font-bold transition duration-300">How It Works</a>
+            <a href="#testimonials" class="text-2xl text-gray-800 hover:text-indigo-600 font-bold transition duration-300">Testimonials</a>
+            <a href="/{{path}}" class="bg-indigo-600 text-white px-6 py-3 rounded-full font-bold text-xl hover:bg-indigo-700 transition duration-300">Get Started</a>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <main class="py-12 px-4 md:px-8 hero-bg">
+        <div class="container mx-auto text-center py-20">
+            <h2 class="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-4">
+                Unlock Your Potential with <span class="text-indigo-600">CareerxSkills</span>
+            </h2>
+            <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                Discover the skills you need for your dream career and track your progress in real time.
+            </p>
+            <div class="space-x-4">
+            <a href="/{{path}}" class="bg-indigo-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105 shadow-lg">Get Started</a>
+                <a href="/dev" class="text-indigo-600 px-8 py-4 rounded-full font-bold text-lg border border-indigo-600 hover:bg-indigo-100 transition duration-300 transform hover:scale-105">~$:Developers#</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Features Section -->
+    <section class="py-12 px-4 md:px-8 bg-white" id="features">
+        <div class="container mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">Features Built for Your Success</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-12 h-12 mx-auto text-indigo-600 mb-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 009-9v-4a2 2 0 00-2-2h-3V5a2 2 0 00-2-2h-2a2 2 0 00-2 2v2H5a2 2 0 00-2 2v4a9 9 0 009 9z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Personalized Roadmaps</h3>
+                    <p class="text-gray-600">We analyze your goals and recommend a step-by-step path to get you there.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-12 h-12 mx-auto text-indigo-600 mb-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 100 15 7.5 7.5 0 000-15z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5l-2.25 2.25m4.5-4.5l-2.25 2.25M12 10.5h.008v.008H12z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Skill Tracking</h3>
+                    <p class="text-gray-600">Easily monitor your progress and see how close you are to mastering your target skills.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-12 h-12 mx-auto text-indigo-600 mb-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Job Recommendations</h3>
+                    <p class="text-gray-600">Get custom job alerts based on your skills and career progress.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-12 px-4 md:px-8" id="how-it-works">
+        <div class="container mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-indigo-100 text-indigo-600 w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4">1</div>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Create Your Profile</h4>
+                    <p class="text-gray-600 max-w-xs">Tell us about your career goals and current skill set in minutes.</p>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-indigo-100 text-indigo-600 w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4">2</div>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Receive Your Roadmap</h4>
+                    <p class="text-gray-600 max-w-xs">Our AI generates a personalized path with the skills you need to learn.</p>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-indigo-100 text-indigo-600 w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4">3</div>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Start Your Journey</h4>
+                    <p class="text-gray-600 max-w-xs">Follow your roadmap, track your progress, and get matched with opportunities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-12 px-4 md:px-8 bg-white" id="testimonials">
+        <div class="container mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">What Our Users Say</h2>
+            <div class="relative w-full max-w-2xl mx-auto h-64 overflow-hidden">
+                <div id="testimonial-carousel" class="flex transition-transform duration-500 ease-in-out">
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-card p-8 rounded-xl shadow-md border-l-4 border-indigo-600 flex-none bg-gray-50 active">
+                        <p class="text-gray-700 italic mb-4">"CareerxSkills helped me identify the exact skills I needed to transition into a new career. The roadmap was incredibly clear and easy to follow!"</p>
+                        <div class="flex items-center">
+                            <img src="https://placehold.co/50x50/f0abfc/ffffff?text=J.D." alt="Jane Doe" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-semibold text-gray-900">Jane Doe</p>
+                                <p class="text-sm text-gray-500">Marketing Professional</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 2 -->
+                    <div class="testimonial-card p-8 rounded-xl shadow-md border-l-4 border-indigo-600 flex-none bg-gray-50">
+                        <p class="text-gray-700 italic mb-4">"The skill tracking feature is a game-changer. I can see my progress and feel motivated to keep learning. Highly recommend!"</p>
+                        <div class="flex items-center">
+                            <img src="https://placehold.co/50x50/f0abfc/ffffff?text=J.S." alt="John Smith" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-semibold text-gray-900">John Smith</p>
+                                <p class="text-sm text-gray-500">Software Developer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 3 -->
+                    <div class="testimonial-card p-8 rounded-xl shadow-md border-l-4 border-indigo-600 flex-none bg-gray-50">
+                        <p class="text-gray-700 italic mb-4">"Finding job opportunities has never been easier. The platform suggests roles that genuinely match my updated skill set."</p>
+                        <div class="flex items-center">
+                            <img src="https://placehold.co/50x50/f0abfc/ffffff?text=E.W." alt="Emily White" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-semibold text-gray-900">Emily White</p>
+                                <p class="text-sm text-gray-500">Data Analyst</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center mt-8 space-x-4">
+                <button id="prev-testimonial" class="p-3 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12 15.75 4.5" />
+                    </svg>
+                </button>
+                <button id="next-testimonial" class="p-3 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="py-20 px-4 md:px-8 bg-indigo-600 text-white text-center">
+        <div class="container mx-auto">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4">Ready to Start Your Journey?</h2>
+            <p class="text-lg md:text-xl mb-8 max-w-xl mx-auto opacity-90">Join thousands of professionals already building the skills they need for a successful career.</p>
+            <a href="#" class="bg-white text-indigo-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-200 transition duration-300 transform hover:scale-105 shadow-xl">Get Started Today</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8 mt-12">
+        <div class="container mx-auto text-center px-4">
+            <p>&copy; 2024 CareerxSkills. All rights reserved.</p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a>
+                <span class="text-gray-600">|</span>
+                <a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile menu functionality & Testimonial Carousel JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu Logic
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeMenu = document.getElementById('close-menu');
+
+            if (menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenu.classList.toggle('flex');
+                });
+            }
+
+            const navLinks = mobileMenu.querySelectorAll('a');
+            if (closeMenu) {
+                closeMenu.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('flex');
+                });
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('flex');
+                });
+            });
+
+            // Smooth Scroll Logic
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Testimonial Carousel Logic
+            const testimonials = document.querySelectorAll('.testimonial-card');
+            const nextButton = document.getElementById('next-testimonial');
+            const prevButton = document.getElementById('prev-testimonial');
+            let currentIndex = 0;
+
+            function updateCarousel() {
+                testimonials.forEach((card, index) => {
+                    if (index === currentIndex) {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
+            }
+
+            nextButton.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % testimonials.length;
+                updateCarousel();
+            });
+
+            prevButton.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
+                updateCarousel();
+            });
+        });
+    </script>
+</body>
+</html>

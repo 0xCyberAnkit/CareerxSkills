@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerxSkills Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind's gray-50 */
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #4f46e5;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        .progress-bar-fill {
+            transition: width 1s ease-in-out;
+        }
+    </style>
+    {% endblock head %}
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen">
+    <!-- Navigation Bar -->
+    <header class="bg-white shadow-md p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-indigo-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 009-9v-4a2 2 0 00-2-2h-3V5a2 2 0 00-2-2h-2a2 2 0 00-2 2v2H5a2 2 0 00-2 2v4a9 9 0 009 9z" />
+                </svg>
+                <h1 class="text-2xl font-bold text-indigo-600">CareerxSkills</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8 items-center">
+                <a href="/dashboard" class="nav-link text-gray-700 font-medium hover:text-indigo-600 transition duration-300">Dashboard</a>
+                <a href="/roadmap" class="nav-link text-gray-700 font-medium hover:text-indigo-600 transition duration-300">Roadmap</a>
+                <a href="/profile" class="nav-link text-gray-700 font-medium hover:text-indigo-600 transition duration-300">Profile</a>
+                <a href="/ai" class="nav-link text-gray-700 font-medium hover:text-indigo-600 transition duration-300">AI Mentor</a>
+                <a href="/auth" class="bg-red-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-red-600 transition duration-300 transform hover:scale-105 shadow-lg">Log Out</a>
+            </nav>
+            <button id="menu-toggle" class="md:hidden focus:outline-none">
+                <!-- Hamburger menu icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-gray-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-white z-40 p-6 flex flex-col items-center justify-center">
+        <button id="close-menu" class="absolute top-4 right-4 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-gray-600">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <nav class="flex flex-col space-y-6 text-center">
+            <a href="/dashboard" class="text-2xl text-gray-800 hover:text-indigo-600 font-bold transition duration-300">Dashboard</a>
+            <a href="/roadmap" class="text-2xl text-gray-800 hover:text-indigo-600 font-bold transition duration-300">Roadmap</a>
+            <a href="/profile" class="text-2xl text-gray-800 hover:text-indigo-600 font-bold transition duration-300">Profile</a>
+            <a href="/ai" class="text-2xl text-gray-800 hover:text-indigo-600 font-bold transition duration-300">AI Mentor</a>
+            <a href="/auth" class="bg-red-500 text-white px-6 py-3 rounded-full font-bold text-xl hover:bg-red-600 transition duration-300">Log Out</a>
+        </nav>
+    </div>
+{% block main %}
+    <!-- Main Dashboard Content -->
+    <main class="container mx-auto p-4 md:p-8">
+        <!-- Header Section -->
+        <div class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white p-8 rounded-2xl shadow-lg mb-8 flex flex-col md:flex-row md:justify-between md:items-center">
+            <div class="mb-4 md:mb-0">
+                <h2 class="text-4xl font-bold mb-2">Welcome Back, {{name}}!</h2>
+                <p class="text-indigo-200">You're one step closer to your dream career. Let's make it happen!</p>
+            </div>
+            <div class="mt-4 md:mt-0 md:ml-6 flex-shrink-0">
+                <div class="w-20 h-20 rounded-full bg-white text-indigo-600 flex items-center justify-center font-bold text-3xl shadow-md">
+                    {{logo}}
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Main Content Column -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Career Roadmap & Progress -->
+                <section>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-6">Your Career Roadmap</h3>
+                    <div class="bg-white rounded-xl card p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-semibold text-indigo-600 bg-indigo-100 px-3 py-1 rounded-full">
+                                Goal: Senior Software Engineer
+                            </span>
+                            <span class="text-sm font-bold text-indigo-600">
+                                40% Complete
+                            </span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-indigo-600 h-2.5 rounded-full progress-bar-fill" style="width: 40%;"></div>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-3">You've completed Phase 1 of your roadmap. Keep up the great work!</p>
+                    </div>
+                </section>
+
+                <!-- Skills Progress Section -->
+                <section>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-6">Skills Progress</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Skill Card 1: JavaScript -->
+                        <div class="bg-white rounded-xl card p-6">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="bg-gray-200 p-2 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-yellow-500">
+                                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm2.25 14.12l-1.63-1.63L11.5 16.25 8.75 13.5l1.62-1.62L12 13.5l2.25-2.25 1.63 1.63z" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-xl font-bold text-gray-900">JavaScript</h4>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-4">Core Front-end Development</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-green-500 h-2.5 rounded-full progress-bar-fill" style="width: 75%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Skill Card 2: React -->
+                        <div class="bg-white rounded-xl card p-6">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="bg-gray-200 p-2 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-blue-500">
+                                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm2.25 14.12l-1.63-1.63L11.5 16.25 8.75 13.5l1.62-1.62L12 13.5l2.25-2.25 1.63 1.63z" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-xl font-bold text-gray-900">React</h4>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-4">Advanced Front-end Library</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-yellow-500 h-2.5 rounded-full progress-bar-fill" style="width: 50%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Skill Card 3: Node.js -->
+                        <div class="bg-white rounded-xl card p-6">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="bg-gray-200 p-2 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-green-500">
+                                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm2.25 14.12l-1.63-1.63L11.5 16.25 8.75 13.5l1.62-1.62L12 13.5l2.25-2.25 1.63 1.63z" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-xl font-bold text-gray-900">Node.js</h4>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-4">Back-end Development</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-red-500 h-2.5 rounded-full progress-bar-fill" style="width: 20%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Sidebar Column -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Recent Activity Section -->
+                <section>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-6">Recent Activity</h3>
+                    <div class="bg-white rounded-xl card p-6 space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <p class="text-sm text-gray-700">Completed the <strong class="font-medium">JavaScript Loops</strong> module.</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                                </svg>
+                            </div>
+                            <p class="text-sm text-gray-700">Started the <strong class="font-medium">React Hooks</strong> course.</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l-.25-.25m0 0l-4.5 4.5m4.5-4.5l4.5 4.5m-4.5-4.5l-4.5-4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <p class="text-sm text-gray-700">Attempted <strong class="font-medium">Git Quiz 1</strong>.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Upcoming Events Section -->
+                <section>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-6">Upcoming Events</h3>
+                    <div class="bg-white rounded-xl card p-6 space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v6.75M12 12.75L12 15M12 12.75H12M12 12.75H12" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="flex flex-col">
+                                <p class="text-sm font-medium text-gray-900">Mentor Call with Sarah</p>
+                                <p class="text-xs text-gray-500">Wednesday, Oct 2, 2:00 PM</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                                </svg>
+                            </div>
+                            <div class="flex flex-col">
+                                <p class="text-sm font-medium text-gray-900">Complete Portfolio Project</p>
+                                <p class="text-xs text-gray-500">Friday, Oct 11, 5:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeMenu = document.getElementById('close-menu');
+
+            if (menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenu.classList.toggle('flex');
+                });
+            }
+
+            if (closeMenu) {
+                closeMenu.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('flex');
+                });
+            }
+
+            // Close mobile menu when a link is clicked
+            const navLinks = mobileMenu.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('flex');
+                });
+            });
+        });
+    </script>
+    {% endblock main %}
+</body>
+</html>

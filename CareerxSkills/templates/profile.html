@@ -1,0 +1,261 @@
+{% extends "dashboard.html" %}
+{% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerxSkills Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind's gray-50 */
+        }
+        .profile-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+        }
+        .form-section, .profile-section {
+            transition: opacity 0.5s ease-in-out;
+        }
+        .skills-tag {
+            background-color: #64748b; /* slate-500 */
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem; /* sm */
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .remove-skill {
+            cursor: pointer;
+            color: #d1d5db; /* gray-300 */
+            transition: color 0.2s ease;
+        }
+        .remove-skill:hover {
+            color: #fca5a5; /* red-300 */
+        }
+        .skill-tag-container {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+{% endblock head %}
+{% block main %}
+    <!-- Main Profile Content -->
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="max-w-xl mx-auto profile-card rounded-2xl shadow-xl p-8 bg-white/75 relative overflow-hidden">
+            <!-- Profile Info Section -->
+            <div id="profile-section" class="profile-section space-y-6">
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-28 h-28 rounded-full bg-indigo-100 flex items-center justify-center font-bold text-5xl text-indigo-600 mb-4 shadow-inner">
+                        {{logo}}
+                    </div>
+                    <h2 id="name-display" class="text-4xl font-bold text-gray-900">{{name}}</h2>
+                    <p class="text-md text-gray-500">{{email}}</p>
+                </div>
+
+                <div class="space-y-4 pt-6 border-t border-gray-300">
+                    <div>
+                        <p class="text-sm font-semibold text-gray-600 uppercase">Career Goal</p>
+                        <p id="career-goal-display" class="text-lg text-gray-900 font-medium">Senior Software Engineer</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-600 uppercase">About Me</p>
+                        <p id="about-me-display" class="text-lg text-gray-900 font-medium">A passionate developer with a strong focus on building user-centric web applications.</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-600 uppercase">Skills</p>
+                        <div id="skills-list" class="flex flex-wrap gap-2 mt-2">
+                            <span class="skills-tag skill-tag-container">JavaScript<span class="remove-skill">&times;</span></span>
+                            <span class="skills-tag skill-tag-container">React<span class="remove-skill">&times;</span></span>
+                            <span class="skills-tag skill-tag-container">Tailwind CSS<span class="remove-skill">&times;</span></span>
+                            <span class="skills-tag skill-tag-container">Node.js<span class="remove-skill">&times;</span></span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-600 uppercase">Contact</p>
+                        <p id="contact-display" class="text-lg text-gray-900 font-medium">linkedin.com/in/alexj</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-center mt-6">
+                    <button id="edit-button" class="bg-indigo-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition duration-300 transform hover:scale-105 shadow-md">
+                        Edit Profile
+                    </button>
+                </div>
+            </div>
+
+            <!-- Edit Form Section (Hidden by default) -->
+            <div id="edit-form-section" class="form-section hidden p-8">
+                <h3 class="text-3xl font-bold text-gray-900 mb-6">Edit Profile</h3>
+                <form id="profile-form" class="space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                        <input type="text" id="name-input" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" value="Alex Johnson">
+                    </div>
+                    <div>
+                        <label for="career-goal" class="block text-sm font-medium text-gray-700">Career Goal</label>
+                        <input type="text" id="career-goal-input" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" value="Senior Software Engineer">
+                    </div>
+                    <div>
+                        <label for="about-me" class="block text-sm font-medium text-gray-700">About Me</label>
+                        <textarea id="about-me-input" rows="3" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">A passionate developer with a strong focus on building user-centric web applications.</textarea>
+                    </div>
+                    <div>
+                        <label for="contact-info" class="block text-sm font-medium text-gray-700">Contact/Portfolio URL</label>
+                        <input type="text" id="contact-input" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" value="linkedin.com/in/alexj">
+                    </div>
+                    <div class="mt-4">
+                        <label for="new-skill" class="block text-sm font-medium text-gray-700">Add New Skills</label>
+                        <div class="flex space-x-2 mt-1">
+                            <input type="text" id="new-skill" placeholder="e.g., Python" class="flex-grow p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <button type="button" id="add-skill-button" class="bg-gray-800 text-white p-3 rounded-md font-semibold hover:bg-gray-700 transition duration-300">Add</button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between space-x-4 mt-6">
+                        <button type="button" id="cancel-button" class="w-full bg-gray-400 text-white p-3 rounded-md font-semibold hover:bg-gray-500 transition duration-300">Cancel</button>
+                        <button type="submit" class="w-full bg-indigo-600 text-white p-3 rounded-md font-semibold hover:bg-indigo-700 transition duration-300">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeMenu = document.getElementById('close-menu');
+            const editButton = document.getElementById('edit-button');
+            const profileSection = document.getElementById('profile-section');
+            const editFormSection = document.getElementById('edit-form-section');
+            const cancelButton = document.getElementById('cancel-button');
+            const profileForm = document.getElementById('profile-form');
+            const addSkillButton = document.getElementById('add-skill-button');
+            const newSkillInput = document.getElementById('new-skill');
+            const skillsList = document.getElementById('skills-list');
+
+            const nameDisplay = document.getElementById('name-display');
+            const careerGoalDisplay = document.getElementById('career-goal-display');
+            const aboutMeDisplay = document.getElementById('about-me-display');
+            const contactDisplay = document.getElementById('contact-display');
+
+            const nameInput = document.getElementById('name-input');
+            const careerGoalInput = document.getElementById('career-goal-input');
+            const aboutMeInput = document.getElementById('about-me-input');
+            const contactInput = document.getElementById('contact-input');
+
+            // Mobile menu toggle logic
+            if (menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenu.classList.toggle('flex');
+                });
+            }
+            if (closeMenu) {
+                closeMenu.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('flex');
+                });
+            }
+            const navLinks = mobileMenu.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('flex');
+                });
+            });
+
+            // Toggle between profile view and edit form
+            function showProfile() {
+                editFormSection.classList.add('hidden');
+                profileSection.classList.remove('hidden');
+            }
+
+            function showForm() {
+                profileSection.classList.add('hidden');
+                editFormSection.classList.remove('hidden');
+            }
+
+            editButton.addEventListener('click', showForm);
+            cancelButton.addEventListener('click', showProfile);
+
+            // Add new skill functionality
+            const addSkill = () => {
+                const skill = newSkillInput.value.trim();
+                if (skill) {
+                    const skillTag = document.createElement('span');
+                    skillTag.className = 'skills-tag skill-tag-container';
+                    skillTag.innerHTML = `${skill}<span class="remove-skill">&times;</span>`;
+                    skillsList.appendChild(skillTag);
+                    newSkillInput.value = '';
+                }
+            };
+            addSkillButton.addEventListener('click', addSkill);
+            newSkillInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addSkill();
+                }
+            });
+
+            // Remove skill functionality using event delegation
+            skillsList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-skill')) {
+                    e.target.parentNode.remove();
+                }
+            });
+
+            // Handle form submission
+            profileForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (nameInput.value.trim() === '' || careerGoalInput.value.trim() === '') {
+                    showToast('Please fill out all fields.', 'bg-red-500');
+                    return;
+                }
+
+                // Update the displayed profile info
+                nameDisplay.textContent = nameInput.value;
+                careerGoalDisplay.textContent = careerGoalInput.value;
+                aboutMeDisplay.textContent = aboutMeInput.value;
+                contactDisplay.textContent = contactInput.value;
+
+                showToast('Profile updated successfully!', 'bg-green-500');
+                showProfile();
+            });
+        });
+
+        // Custom toast message function
+        function showToast(message, bgColor) {
+            const toast = document.createElement('div');
+            toast.classList.add(
+                'fixed', 'top-8', 'left-1/2', '-translate-x-1/2', 'text-white', 'p-4', 'rounded-lg',
+                'shadow-lg', 'z-50', 'text-center', 'max-w-sm', 'transition-all',
+                'duration-300', 'ease-out', 'transform', 'scale-0', 'opacity-0', bgColor
+            );
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('scale-0', 'opacity-0');
+                toast.classList.add('scale-100', 'opacity-100');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.remove('scale-100', 'opacity-100');
+                toast.classList.add('scale-0', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+{% endblock main %}
